@@ -24,7 +24,7 @@ if (
         if ($archive) {
             if (fwrite($archive, $content)) {
                 echo 'Escrita realizada com sucesso!';
-                fclose($arquivo);
+                fclose($archive);
             }
         }
     }
