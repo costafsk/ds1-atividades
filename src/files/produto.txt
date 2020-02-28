@@ -1,3 +1,4 @@
-1;diego;3;54
-1;diego;3;54
-1;diego costa;45;655
+1;Diego Costa;3;45.4
+1;abacate;5;80
+1;COSTAFSK;1;5000.43
+1;ska;500;25.7

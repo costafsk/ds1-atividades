@@ -1,12 +1,14 @@
 <?php
 
-if (
-    isset($_POST['codigo']) && 
+require_once("./../utils/utils.php");
+
+
+if ( 
     isset($_POST['nome']) && 
     isset($_POST['quantidade']) &&
     isset($_POST['preco'])) 
     {
-        $content = $_POST['codigo']
+        $content = gen_codigo()
             .';'
             .$_POST['nome']
             .';'
@@ -28,5 +30,6 @@ if (
             }
         }
     }
+header('Location: ./../main.php');
 
 ?>

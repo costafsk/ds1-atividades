@@ -2,19 +2,22 @@
 
 require_once("./utils/utils.php");
 
-$path =  './files/produto.txt';
-
-$mode = 'r';
-
-$archive = fopen($path, $mode);
+$archive = fopen('./files/produto.txt', 'r');
 
 if (!$archive) die("Nao foi possivel abrir o arquivo");
 
-$row = array_map("mount", explode("\n", file_get_contents($path)));
+$rows = array_map("mount", explode("\n", file_get_contents('./files/produto.txt')));
 
-array_map("mount", $row);
+array_pop($rows);
 
-print_r($row[0]["nome"]);
+$precoInicial = 0;
+
+$maiorPreco = max(array_column($rows, 'preco'));
+$maiorQuantidade = max(array_column($rows, 'quantidade'));
+$maiorTotal = maior_total($rows);
+
+
+print_r($maiorTotal);
 
 fclose($archive);
 ?>
@@ -50,10 +53,6 @@ fclose($archive);
                         <div class="modal-body">
                             <form method="POST" action="./controllers/save.php">
                                 <div class="form-group">
-                                    <label for="codigo">Codigo</label>
-                                    <input type="number" class="form-control" id="codigo" name="codigo">
-                                </div>
-                                <div class="form-group">
                                     <label for="nome">Nome</label>
                                     <input type="text" class="form-control" id="nome" name="nome">
                                 </div>
@@ -74,7 +73,71 @@ fclose($archive);
                     </div>
                 </div>
             </div>
-
+            <div class="d-flex justify-content-between mt-5">
+                <!-- Produto de maior preço -->
+                <div class="modal fade" id="modalMaiorPreco" tabindex="-1" role="dialog" aria-labelledby="modalMaiorPreco" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalMaiorPreco">Produto de maior preço</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Produto de maior quantidade -->
+                <div class="modal fade" id="modalMaiorQuantidade" tabindex="-1" role="dialog" aria-labelledby="modalMaiorQuantidade" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalMaiorQuantidade">Produto de maior quantidade</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Maior de maior preço total -->
+                <div class="modal fade" id="modalMaiorPrecoTotal" tabindex="-1" role="dialog" aria-labelledby="modalMaiorPrecoTotal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalMaiorPrecoTotal">Produto de maior preço total</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modalMaiorPreco">Produto de maior preço</button>
+                <button class="btn btn-success" data-toggle="modal" data-target="#modalMaiorQuantidade">Produto de maior quantidade</button>
+                <button class="btn btn-secondary" data-toggle="modal" data-target="#modalMaiorPrecoTotal">Produto de maior preço total</button>
+            </div>
             <table class="table table-dark mt-5">
                 <thead>
                     <tr>
@@ -85,12 +148,14 @@ fclose($archive);
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    <?php foreach($rows as $row) { ?>
+                        <tr>
+                            <th scope="row"><?php echo $row["codigo"] ?></th>
+                            <td><?php echo $row["nome"] ?></td>
+                            <td><?php echo $row["quantidade"] ?></td>
+                            <td><?php echo 'R$ '.$row["preco"] ?></td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </main>
